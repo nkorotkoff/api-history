@@ -28,6 +28,12 @@ RUN apt-get update && apt-get install -y \
     zip \
     && rm -rf /var/lib/apt/lists/*
 
+RUN pecl install xdebug && docker-php-ext-enable xdebug
+
+RUN echo "xdebug.mode=debug" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
+    echo "xdebug.client_host=host.docker.internal" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini && \
+    echo "xdebug.client_port=9003" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+
 # Определение пользователя в файле конфигурации PHP-FPM
 RUN sed -i -e "s/user = .*/user = www-data/g" /usr/local/etc/php-fpm.d/www.conf
 RUN sed -i -e "s/group = .*/group = www-data/g" /usr/local/etc/php-fpm.d/www.conf
