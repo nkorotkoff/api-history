@@ -38,6 +38,7 @@ RUN echo "xdebug.mode=debug" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.
 RUN sed -i -e "s/user = .*/user = www-data/g" /usr/local/etc/php-fpm.d/www.conf
 RUN sed -i -e "s/group = .*/group = www-data/g" /usr/local/etc/php-fpm.d/www.conf
 
+
 # Убедимся, что файлы/директории, необходимые для процессов, доступны при запуске от пользователя www-data
 RUN chown -R www-data:www-data /var/www/html
 

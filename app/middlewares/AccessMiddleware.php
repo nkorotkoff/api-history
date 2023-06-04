@@ -26,7 +26,7 @@ class AccessMiddleware extends Middleware
 
     public function call()
     {
-        $key = openssl_decrypt(base64_decode($this->xEncryptedKey), 'AES-256-CBC', Config::get('secretKey'));
+        $key = openssl_decrypt(base64_decode($this->xEncryptedKey), 'AES-256-CBC', $this->app->config('secretKey'));
 
         if ($key !== false) {
             return $this->next();

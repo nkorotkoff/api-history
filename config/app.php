@@ -23,8 +23,11 @@ $init = function () {
     (function ()
     {
         $db = [
-            'dsn' => 'mysql:host=localhost;dbname=' . _getEnv('MYSQL_DATABASE'),
-            'username' => 'root',
+            'driver' => 'pdo_mysql',
+            'dbname' => _getEnv('MYSQL_DATABASE'),
+            'host' => _getEnv('MYSQL_HOST'),
+            'port' => _getEnv('MYSQL_PORT'),
+            'user' => 'root',
             'password' => _getEnv('MYSQL_ROOT_PASSWORD'),
             'charset' => 'utf8',
         ];
