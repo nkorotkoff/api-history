@@ -28,7 +28,7 @@ class AccessMiddleware extends Middleware
     {
         $key = openssl_decrypt(base64_decode($this->xEncryptedKey), 'AES-256-CBC', $this->app->config('secretKey'));
 
-        if ($key !== false) {
+        if ($key) {
             return $this->next();
         } else {
             $this->returnNotAuthorize();

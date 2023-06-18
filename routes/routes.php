@@ -1,6 +1,6 @@
 <?php
 
-use app\controllers\MainController;
+use app\controllers\AuthController;
 use app\middlewares\AccessMiddleware;
 
 $app = app();
@@ -10,5 +10,8 @@ $app->hook('router.before.dispatch', function () use($app) {
        $app->use($accessMiddleware);
 });
 
-$app->get('/', MainController::class.'@index');
 
+
+$app->group('/api', function () use($app) {
+    $app->post('/register', AuthController::class.'@register');
+});

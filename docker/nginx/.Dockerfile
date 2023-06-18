@@ -1,9 +1,9 @@
-ARG ALPINE_VERSION=3.17
+#ARG ALPINE_VERSION=3.17
 
-FROM alpine:${ALPINE_VERSION}
+FROM nginx:stable-alpine3.17-slim
 
-# Установка Nginx
-RUN apk add --no-cache nginx
+## Установка Nginx
+#RUN apk add --no-cache nginx
 
 # Копирование файла конфигурации Nginx
 COPY ./config/nginx.conf /etc/nginx/nginx.conf

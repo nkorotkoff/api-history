@@ -7,6 +7,7 @@ use Doctrine\ORM\ORMSetup;
 require __DIR__ . '/../vendor/autoload.php';
 
 require __DIR__ . '/InitConfig.php';
+require __DIR__ . '/Container.php';
 
 $paths = array(__DIR__."/../app/entities");
 
