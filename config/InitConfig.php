@@ -52,6 +52,7 @@ class InitConfig
 
         app()->config('secret_key', $secretKey);
         app()->config('db', $db);
+        app()->config('file_log', __DIR__ . '/../logs/logs.txt');
     }
 }
 

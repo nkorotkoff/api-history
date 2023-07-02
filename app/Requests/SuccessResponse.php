@@ -6,10 +6,10 @@ namespace app\Requests;
 
 class SuccessResponse
 {
-    const OK = 200;
 
-    public static function setData(string $message): array
+
+    public static function setData(int $successCode, mixed $data): array
     {
-        return ['data' => $message, 'code' => self::OK];
+        return ['message' => ResponseCodes::MESSAGES[$successCode], 'code' => $successCode, 'result' => $data];
     }
 }

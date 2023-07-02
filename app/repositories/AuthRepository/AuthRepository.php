@@ -23,9 +23,19 @@ class AuthRepository
     }
 
 
-    public function isExistUser(RegisterDto $dto): object | null
+    public function getUser(BaseDto $dto): ?User
     {
        return $this->userRepository->findOneBy(['email' => $dto->email]);
 
+    }
+
+    public function getUserById(int $userId): ?User
+    {
+        return $this->userRepository->findOneBy(['id' => $userId]);
+    }
+
+    public function getUserByRefreshToken(string $refreshToken): ?User
+    {
+        return $this->userRepository->findOneBy(['refresh_token' => $refreshToken]);
     }
 }

@@ -24,6 +24,9 @@ class User
     #[ORM\Column(type: 'string', length: 255)]
     private string $password;
 
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
+    private string $refresh_token;
+
     // Геттеры и сеттеры для свойств
     public function getId(): ?int
     {
@@ -53,6 +56,21 @@ class User
     public function setPassword(string $password): void
     {
         $this->password = password_hash($password, PASSWORD_DEFAULT);
+    }
+
+    public function setRefreshToken(string $refreshToken)
+    {
+        $this->refresh_token = $refreshToken;
+    }
+
+    public function getRefreshToken(): ?string
+    {
+        return $this->refresh_token;
+    }
+
+    public function getHashPassword(): string
+    {
+        return $this->password;
     }
 
     public function isPasswordCorrect(string $hash): bool

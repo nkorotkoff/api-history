@@ -18,4 +18,9 @@ abstract class BaseDto implements Validatable
     }
 
     abstract public function validate(): void;
+
+    public function hasError(): bool
+    {
+        return $this->error !== null;
+    }
 }

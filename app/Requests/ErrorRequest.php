@@ -9,11 +9,15 @@ use Leaf\Http\Response;
 
 class ErrorRequest
 {
+    const EXCEPTION = 500;
 
-    const BAD_PARAM = 403;
-
-    public static function setError(string $message): array
+    public static function setErrorWithCode(string $errorCode): array
     {
-       return ['message' => $message, 'code' => self::BAD_PARAM];
+       return ['message' => ResponseCodes::MESSAGES[$errorCode], 'code' => $errorCode];
+    }
+
+    public static function setErrorException(string $message): array
+    {
+        return ['message' => $message, 'code' => self::EXCEPTION];
     }
 }

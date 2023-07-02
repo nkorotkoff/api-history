@@ -4,53 +4,78 @@
 namespace app\middlewares;
 
 
+use app\entities\UserAuthEntity;
+use app\repositories\AuthRepository\AuthRepository;
+use app\Requests\ErrorRequest;
+use app\Requests\ResponseCodes;
+use app\services\AuthService\AuthService;
+use app\services\AuthService\JwtService;
+use Exception;
 use Leaf\App;
 use Leaf\Config;
+use Leaf\Http\Headers;
 use Leaf\Middleware;
+use Psr\Container\ContainerInterface;
 
 class AccessMiddleware extends Middleware
 {
 
     const PRODUCTION = 'production';
 
-    private ?string $xEncryptedKey;
+    private ?string $accessToken;
+    private ?string $refreshToken;
+    private JwtService $jwtService;
 
-    public function __construct(?string $xEncryptedKey)
+    public function __construct(?string $accessToken, ?string $refreshToken, JwtService $jwtService)
     {
-        $this->xEncryptedKey = $xEncryptedKey;
+        $this->accessToken = $accessToken;
+        $this->refreshToken = $refreshToken;
+        $this->jwtService = $jwtService;
         $this->app = app();
-        $this->isEncryptedKeyExist();
+        $this->isHeadersProvided();
     }
 
 
 
     public function call()
     {
-        $key = openssl_decrypt(base64_decode($this->xEncryptedKey), 'AES-256-CBC', $this->app->config('secretKey'));
+        $verifiedAccessToken = $this->jwtService->verifyToken($this->accessToken);
 
-        if ($key) {
+        $verifiedRefreshToken = $this->jwtService->verifyToken($this->refreshToken);
+        if ($verifiedAccessToken['success']) {
+            $this->setUser($verifiedAccessToken['data']->userId);
             return $this->next();
-        } else {
+        } elseif ($verifiedRefreshToken['success']) {
+            if ((new AuthRepository())->getUserByRefreshToken($this->refreshToken)) {
+                $this->jwtService->setAccessAndRefreshTokens($verifiedRefreshToken['data']->userId);
+                return $this->next();
+            }
+            $this->returnNotAuthorize();
+        }  else {
             $this->returnNotAuthorize();
         }
     }
 
-    public function isEncryptedKeyExist(): void
+    private function isHeadersProvided(): void
     {
-        if (!is_string($this->xEncryptedKey)) {
+        if (!is_string($this->accessToken) || !is_string($this->refreshToken)) {
             $this->returnNotAuthorize();
         }
     }
 
     public function returnNotAuthorize()
     {
-        $currentMode = $this->app->config('mode');
-        if ($currentMode === self::PRODUCTION ) {
-            $this->app->response()->json('not authorized', 403, true);
-        }
+        $this->app->response()->json(ErrorRequest::setErrorWithCode(ResponseCodes::USER_TOKENS_WRONG), 403);
         return $this->next();
     }
 
-
+    private function setUser($userId)
+    {
+        $user = (new AuthRepository())->getUserById($userId);
+        if (!$user) {
+            $this->returnNotAuthorize();
+        }
+        (UserAuthEntity::getInstance())->setUser($user);
+    }
 
 }

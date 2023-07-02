@@ -10,7 +10,9 @@
     "symfony/cache": "^5.4",
     "doctrine/migrations": "^3.6.0",
     "respect/validation": "^2.3.0-RC",
-    "php-di/php-di": "7.0.2"
+    "php-di/php-di": "7.0.2",
+    "firebase/php-jwt": "v6.8.0",
+    "monolog/monolog" : "3.4.0"
   },
   "autoload": {
     "psr-4": {
