@@ -4,15 +4,11 @@ namespace app\controllers;
 
 use app\dto\Auth\LoginDto;
 use app\dto\Auth\RegisterDto;
-use app\entities\User;
-use app\repositories\AuthRepository\AuthRepository;
 use app\Requests\ErrorRequest;
 use app\Requests\ResponseCodes;
 use app\Requests\SuccessResponse;
 use app\services\AuthService\AuthService;
 use app\services\AuthService\JwtService;
-use Doctrine\ORM\EntityManager;
-use Leaf\Http\Headers;
 use Psr\Container\ContainerInterface;
 
 class AuthController extends Controller
@@ -40,7 +36,7 @@ class AuthController extends Controller
 
         $response = $this->authService->register($registerData);
         if ($response['code'] === ResponseCodes::OK) {
-           $this->setAccessAndRefreshTokens($response['result']);
+           $this->jwtService->setAccessAndRefreshTokens($response['result']);
         }
         $this->response->json($response);
     }
@@ -59,8 +55,4 @@ class AuthController extends Controller
         $this->response->json(ErrorRequest::setErrorWithCode(ResponseCodes::WRONG_USER_CREDENTIALS), 400);
     }
 
-    public function checkAccessMiddleware()
-    {
-        $this->response->json('work');
-    }
 }

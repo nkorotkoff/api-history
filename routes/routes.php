@@ -27,5 +27,16 @@ $app->group('/api', function () use($app) {
 });
 
 $app->group('/api',['middleware' => 'auth', function () use($app) {
-    $app->get('/check', AuthController::class.'@checkAccessMiddleware');
+
 }]);
+
+
+if ($app->config('mode') === 'development') {
+    $app->get('/swagger', function () use ($app) {
+        $app->response()->page(__DIR__ . '/../swagger/swaggerUi.php' );
+    });
+
+    $app->get('/swagger-yaml', function () use ($app) {
+        $app->response()->page( __DIR__ . '/../swagger/openapi.yaml' );
+    });
+}

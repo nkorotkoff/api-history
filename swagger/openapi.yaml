@@ -1,0 +1,89 @@
+openapi: 3.0.0
+info:
+  title: 'Документация для api_content'
+  version: 1.0.0
+paths:
+  /api/: {  }
+  /api/login:
+    post:
+      tags:
+        - User
+      summary: Вход
+      description: Вход
+      operationId: d75fe20d035773469257cf30d33e4066
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                email:
+                  type: string
+                  example: user@example.com
+                password:
+                  type: string
+                  example: mypassword
+              type: object
+      responses:
+        '200':
+          description: 'Успешный вход'
+          content:
+            application/json:
+              schema:
+                properties:
+                  message: { type: string, example: OK }
+                  code: { type: string, example: '2' }
+                  result: { type: string, example: '12' }
+                type: object
+        '400':
+          description: 'Введеный неверный данные'
+          content:
+            application/json:
+              schema:
+                properties:
+                  message: { type: string, example: 'Wrong user credentials' }
+                  code: { type: string, example: '3' }
+                type: object
+  /api/register:
+    post:
+      tags:
+        - User
+      summary: 'Регистрация пользователя'
+      description: 'Регистрация нового пользователя'
+      operationId: 7920e668745b4935b739903d0ecaccda
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                email:
+                  type: string
+                  example: user@example.com
+                password:
+                  type: string
+                  example: mypassword
+                login:
+                  type: string
+                  example: 'John Doe'
+              type: object
+      responses:
+        '200':
+          description: 'Успешная регистрация'
+          content:
+            application/json:
+              schema:
+                properties:
+                  message: { type: string, example: OK }
+                  code: { type: string, example: '2' }
+                  result: { type: string, example: '12' }
+                type: object
+        '409':
+          description: 'Пользователь уже существует'
+          content:
+            application/json:
+              schema:
+                properties:
+                  message: { type: string, example: 'User already exist' }
+                  code: { type: string, example: '1' }
+                type: object

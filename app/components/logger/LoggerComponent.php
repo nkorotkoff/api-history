@@ -29,4 +29,5 @@ class LoggerComponent {
     public function log(mixed $level, string $message, array $context = []) {
         $this->logger->log($level, $message, $context);
     }
+
 }

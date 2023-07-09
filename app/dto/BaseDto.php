@@ -4,6 +4,8 @@
 namespace app\dto;
 
 
+use Monolog\Logger;
+
 abstract class BaseDto implements Validatable
 {
     public function __construct(array $data)
@@ -21,6 +23,9 @@ abstract class BaseDto implements Validatable
 
     public function hasError(): bool
     {
+        if ($this->error) {
+            app()->config('container')->get('logger')->log(Logger::INFO, 'Validation error:' . $this->error);
+        }
         return $this->error !== null;
     }
 }

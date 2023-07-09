@@ -9,11 +9,20 @@ use Respect\Validation\Exceptions\ValidationException;
 
 class RegisterDto extends BaseDto
 {
-    public string $login;
+    /**
+     * @var string $login
+     */
+    public $login;
 
-    public string $password;
+    /**
+     * @var string $password
+     */
+    public $password;
 
-    public string $email;
+    /**
+     * @var string $email
+     */
+    public $email;
 
     public ?string $error = null;
 

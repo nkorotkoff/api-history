@@ -27,7 +27,6 @@ class User
     #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private string $refresh_token;
 
-    // Геттеры и сеттеры для свойств
     public function getId(): ?int
     {
         return $this->id;

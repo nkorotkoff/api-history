@@ -10,9 +10,15 @@ use Respect\Validation\Validator as v;
 
 class LoginDto extends BaseDto
 {
-    public string $email;
+    /**
+     * @var string $email
+     */
+    public $email;
 
-    public string $password;
+    /**
+     * @var string $password
+     */
+    public $password;
 
     public ?string $error = null;
 

@@ -1,7 +1,6 @@
 {
   "require": {
     "leafs/leaf": "^3.0",
-    "leafs/db": "^2.1",
     "vlucas/phpdotenv": "^v5.5.0",
     "ext-openssl": "*",
     "doctrine/orm": "^2.15.2",
@@ -12,12 +11,14 @@
     "respect/validation": "^2.3.0-RC",
     "php-di/php-di": "7.0.2",
     "firebase/php-jwt": "v6.8.0",
-    "monolog/monolog" : "3.4.0"
+    "monolog/monolog" : "3.4.0",
+    "zircote/swagger-php" : "4.7.10"
   },
   "autoload": {
     "psr-4": {
       "app\\": "app",
-      "migrations\\": "db/migrations"
+      "migrations\\": "db/migrations",
+      "swagger\\": "swagger"
     }
   }
 }
