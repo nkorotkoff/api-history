@@ -22,31 +22,33 @@ class AccessMiddleware extends Middleware
 
     const PRODUCTION = 'production';
 
-    private ?string $accessToken;
-    private ?string $refreshToken;
-    private JwtService $jwtService;
+    protected ?string $accessToken;
+    protected ?string $refreshToken;
+    protected JwtService $jwtService;
+    protected AuthRepository $authRepository;
 
-    public function __construct(?string $accessToken, ?string $refreshToken, JwtService $jwtService)
+    public function __construct(?string $accessToken, ?string $refreshToken)
     {
         $this->accessToken = $accessToken;
         $this->refreshToken = $refreshToken;
-        $this->jwtService = $jwtService;
+        $this->jwtService = app()->config('container')->get(JwtService::class);;
+        $this->authRepository = app()->config('container')->get(AuthRepository::class);
         $this->app = app();
-        $this->isHeadersProvided();
     }
-
 
 
     public function call()
     {
+        $this->isHeadersProvided();
+
         $verifiedAccessToken = $this->jwtService->verifyToken($this->accessToken);
 
         $verifiedRefreshToken = $this->jwtService->verifyToken($this->refreshToken);
-        if ($verifiedAccessToken['success']) {
+        if (isset($verifiedAccessToken['success'])) {
             $this->setUser($verifiedAccessToken['data']->userId);
             return $this->next();
-        } elseif ($verifiedRefreshToken['success']) {
-            if ((new AuthRepository())->getUserByRefreshToken($this->refreshToken)) {
+        } elseif (isset($verifiedRefreshToken['success'])) {
+            if ($this->authRepository->getUserByRefreshToken($this->refreshToken)) {
                 $this->jwtService->setAccessAndRefreshTokens($verifiedRefreshToken['data']->userId);
                 return $this->next();
             }
@@ -58,7 +60,7 @@ class AccessMiddleware extends Middleware
 
     private function isHeadersProvided(): void
     {
-        if (!is_string($this->accessToken) || !is_string($this->refreshToken)) {
+        if (empty($this->accessToken) || empty($this->refreshToken)) {
             $this->returnNotAuthorize();
         }
     }
@@ -71,8 +73,8 @@ class AccessMiddleware extends Middleware
 
     private function setUser($userId)
     {
-        $user = (new AuthRepository())->getUserById($userId);
-        if (!$user) {
+        $user = $this->authRepository->getUserById($userId);
+        if (empty($user)) {
             $this->returnNotAuthorize();
         }
         (UserAuthEntity::getInstance())->setUser($user);

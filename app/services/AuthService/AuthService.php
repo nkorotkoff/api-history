@@ -64,6 +64,7 @@ class AuthService
     public function saveUserRefreshToken(int $userId, string $token)
     {
         $userEntity = $this->authRepository->getUserById($userId);
+        UserAuthEntity::getInstance()->setUser($userEntity);
         $userEntity->setRefreshToken($token);
         $this->entityManager->persist($userEntity);
         $this->entityManager->flush();

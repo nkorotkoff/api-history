@@ -11,7 +11,7 @@ use Psr\Container\ContainerInterface;
 $app = app();
 
 $app->registerMiddleware('auth', function () {
-    $accessMiddleware = new AccessMiddleware(Headers::get('Access-Token'), Headers::get('Refresh-Token'), new JwtService());
+    $accessMiddleware = new AccessMiddleware(Headers::get('Access-Token'), Headers::get('Refresh-Token'));
     $accessMiddleware->call();
 });
 

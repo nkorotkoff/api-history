@@ -69,7 +69,8 @@ class JwtService
         }
     }
 
-    public function setAccessAndRefreshTokens(int $userId) {
+    public function setAccessAndRefreshTokens(int $userId)
+    {
         Headers::set([
             'access-token' => $this->generateAccessToken($userId),
             'refresh-token' => $this->generateRefreshToken($userId)

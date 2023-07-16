@@ -20,10 +20,6 @@ class InitConfig
 
     private function setEnv()
     {
-        $getEnv = static function (string $value): ?string {
-            return $_ENV[$value] ?? null;
-        };
-
         $dotenvPath = __DIR__ . '/../.env';
 
         if (file_exists($dotenvPath)) {

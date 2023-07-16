@@ -32,6 +32,11 @@ class User
         return $this->id;
     }
 
+    protected function setId(int $id)
+    {
+        $this->id = $id;
+    }
+
     public function getLogin(): string
     {
         return $this->login;
