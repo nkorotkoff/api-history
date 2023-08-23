@@ -2,14 +2,15 @@
 
 
 use app\components\logger\LoggerComponent;
-use app\services\AuthService\AuthService;
+use Symfony\Component\Cache\Adapter\FilesystemTagAwareAdapter;
 
 $builder = new \DI\ContainerBuilder();
 
 $builder->useAutowiring(true)
     ->useAutowiring(true);
 $builder->addDefinitions([
-    'logger' => new LoggerComponent()
+    'logger' => new LoggerComponent(),
+    'cache' => new FilesystemTagAwareAdapter()
 ]);
 $container = $builder->build();
 

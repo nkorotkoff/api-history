@@ -11,7 +11,7 @@ class ErrorRequest
 {
     const EXCEPTION = 500;
 
-    public static function setErrorWithCode(string $errorCode): array
+    public static function setErrorWithCode(int $errorCode): array
     {
        return ['message' => ResponseCodes::MESSAGES[$errorCode], 'code' => $errorCode];
     }

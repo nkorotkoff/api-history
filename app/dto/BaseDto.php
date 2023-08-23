@@ -8,6 +8,9 @@ use Monolog\Logger;
 
 abstract class BaseDto implements Validatable
 {
+
+    public ?string $error = null;
+
     public function __construct(array $data)
     {
         foreach ($data as $property => $value) {

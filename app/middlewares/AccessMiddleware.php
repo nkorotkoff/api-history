@@ -44,10 +44,10 @@ class AccessMiddleware extends Middleware
         $verifiedAccessToken = $this->jwtService->verifyToken($this->accessToken);
 
         $verifiedRefreshToken = $this->jwtService->verifyToken($this->refreshToken);
-        if (isset($verifiedAccessToken['success'])) {
+        if (isset($verifiedAccessToken['success']) && $verifiedAccessToken['success']) {
             $this->setUser($verifiedAccessToken['data']->userId);
             return $this->next();
-        } elseif (isset($verifiedRefreshToken['success'])) {
+        } elseif (isset($verifiedRefreshToken['success']) && $verifiedRefreshToken['success']) {
             if ($this->authRepository->getUserByRefreshToken($this->refreshToken)) {
                 $this->jwtService->setAccessAndRefreshTokens($verifiedRefreshToken['data']->userId);
                 return $this->next();

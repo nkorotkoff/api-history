@@ -58,10 +58,11 @@ class AuthService
             $this->loggerComponent->log(Logger::INFO, 'Auth Service->login success:' . json_encode($loginDto));
             return $user->getId();
         }
+        $this->loggerComponent->log(Logger::INFO, 'Auth Service->login error: wrong user credentials');
         return null;
     }
 
-    public function saveUserRefreshToken(int $userId, string $token)
+    public function saveUserRefreshToken(int $userId, string $token): void
     {
         $userEntity = $this->authRepository->getUserById($userId);
         UserAuthEntity::getInstance()->setUser($userEntity);

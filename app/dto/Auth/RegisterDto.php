@@ -24,8 +24,6 @@ class RegisterDto extends BaseDto
      */
     public $email;
 
-    public ?string $error = null;
-
     public function validate(): void
     {
         $validator = v::attribute('login', v::stringType()->notEmpty())

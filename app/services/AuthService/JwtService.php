@@ -41,9 +41,9 @@ class JwtService
         return $refreshToken;
     }
 
-    public function generateAccessToken(int $userId)
+    public function generateAccessToken(int $userId): string
     {
-        $expirationTime = time() + 60*60*24;
+        $expirationTime = time() + 60 * 60;
 
         $payload = [
             'exp' => $expirationTime,
@@ -53,7 +53,7 @@ class JwtService
         return JWT::encode($payload, $this->secret, 'HS256');
     }
 
-    public function verifyToken($token): array
+    public function verifyToken(?string $token): array
     {
         try {
             $decoded = JWT::decode($token, new Key($this->secret, 'HS256'));
@@ -69,7 +69,7 @@ class JwtService
         }
     }
 
-    public function setAccessAndRefreshTokens(int $userId)
+    public function setAccessAndRefreshTokens(int $userId): void
     {
         Headers::set([
             'access-token' => $this->generateAccessToken($userId),

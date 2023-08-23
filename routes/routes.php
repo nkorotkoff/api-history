@@ -2,6 +2,7 @@
 
 use app\components\logger\LoggerComponent;
 use app\controllers\AuthController;
+use app\controllers\ReviewController;
 use app\middlewares\AccessMiddleware;
 use app\services\AuthService\JwtService;
 use Leaf\Http\Headers;
@@ -27,7 +28,11 @@ $app->group('/api', function () use($app) {
 });
 
 $app->group('/api',['middleware' => 'auth', function () use($app) {
-
+    $app->get('/check-auth', AuthController::class.'@checkAuth');
+    $app->post('/create-review', ReviewController::class.'@createReviewManually');
+    $app->post('/update-review', ReviewController::class.'@updateReview');
+    $app->get('/get-reviews', ReviewController::class.'@getReviews');
+    $app->delete('/delete-review', ReviewController::class.'@deleteReview');
 }]);
 
 

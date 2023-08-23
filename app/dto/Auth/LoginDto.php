@@ -20,7 +20,6 @@ class LoginDto extends BaseDto
      */
     public $password;
 
-    public ?string $error = null;
 
 
     public function validate(): void

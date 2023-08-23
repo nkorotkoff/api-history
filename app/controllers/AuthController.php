@@ -45,14 +45,19 @@ class AuthController extends Controller
     {
         $loginData = new LoginDto($this->request->body());
         if ($loginData->hasError()) {
-            $this->response->json(ErrorRequest::setErrorException($loginData->error), 400);
+            $this->response->json(ErrorRequest::setErrorException($loginData->error), 403);
         }
         $isUserCredentialsCorrect  = $this->authService->login($loginData);
         if ($isUserCredentialsCorrect) {
             $this->jwtService->setAccessAndRefreshTokens($isUserCredentialsCorrect);
             $this->response->json(SuccessResponse::setData(ResponseCodes::OK, $isUserCredentialsCorrect));
         }
-        $this->response->json(ErrorRequest::setErrorWithCode(ResponseCodes::WRONG_USER_CREDENTIALS), 400);
+        $this->response->json(ErrorRequest::setErrorWithCode(ResponseCodes::WRONG_USER_CREDENTIALS), 403);
+    }
+
+    public function checkAuth()
+    {
+        $this->response->json(SuccessResponse::setData(ResponseCodes::OK, true));
     }
 
 }

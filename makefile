@@ -5,8 +5,13 @@ swagger:
 	docker-compose -f docker-compose.yml exec php php swagger/swaggerGenerator.php
 generate-migration:
 	docker-compose -f docker-compose.yml exec php ./vendor/bin/doctrine-migrations generate
+revert-migration:
+	docker-compose -f docker-compose.yml exec php ./vendor/bin/doctrine-migrations migrate first
 apply-migrations:
 	docker-compose -f docker-compose.yml exec php ./vendor/bin/doctrine-migrations migrate
 psalm:
-	docker-compose -f docker-compose.yml exec -u root php chmod -r 777 .
-	docker-compose -f docker-compose.yml exec php ./vendor/bin/psalm
+	docker exec -u root -it api_content_php_1 vendor/bin/psalm
+#executing psalm - chmod -R 777 /var/www/html, vendor/bin/psalm
+php_container:
+	docker exec -u root -it api_content_php_1 bash
+
