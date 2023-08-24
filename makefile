@@ -5,8 +5,6 @@ swagger:
 	docker-compose -f docker-compose.yml exec php php swagger/swaggerGenerator.php
 generate-migration:
 	docker-compose -f docker-compose.yml exec php ./vendor/bin/doctrine-migrations generate
-revert-migration:
-	docker-compose -f docker-compose.yml exec php ./vendor/bin/doctrine-migrations migrate first
 apply-migrations:
 	docker-compose -f docker-compose.yml exec php ./vendor/bin/doctrine-migrations migrate
 psalm:
@@ -15,3 +13,4 @@ psalm:
 php_container:
 	docker exec -u root -it api_content_php_1 bash
 
+#./vendor/bin/doctrine-migrations migrations:execute migrations\\Version20230824192449 --up down migrations

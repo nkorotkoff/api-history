@@ -40,6 +40,11 @@ class ReviewDto extends BaseDto
      */
     public $author;
 
+    /**
+     * @var string $author
+     */
+    public $whereStay;
+
 
 
     public function validate(): void
@@ -49,7 +54,8 @@ class ReviewDto extends BaseDto
             ->attribute('rating', v::stringType())
             ->attribute('type', v::in(['film', 'serial', 'anime', 'book']))->notEmpty()
             ->attribute('id', v::optional(v::intType()))
-            ->attribute('author', v::optional(v::stringType()));
+            ->attribute('author', v::optional(v::stringType()))
+            ->attribute('whereStay', v::optional(v::stringType()));
 
         try {
             $validator->assert($this);

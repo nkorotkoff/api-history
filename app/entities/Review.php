@@ -39,11 +39,15 @@ class Review
     #[ORM\Column(type: 'integer', nullable: false)]
     private int $created_at;
 
-    #[ORM\Column(type: 'string', length: 255,)]
+    #[ORM\Column(type: 'text', nullable: true)]
     private ?string $review;
 
-    #[ORM\Column(type: 'string', length: 255,)]
+    #[ORM\Column(type: 'string', length: 255, nullable: true)]
     private ?string $author;
+
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $whereStay;
+
 
     public function saveReview(ReviewDto $reviewDto)
     {
@@ -57,5 +61,6 @@ class Review
         }
         $this->type = $reviewDto->type;
         $this->user = $userEntity->getUser();
+        $this->whereStay = $reviewDto->whereStay;
     }
 }
