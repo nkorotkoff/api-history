@@ -7,6 +7,7 @@ namespace app\repositories\ReviewRepositories;
 use app\components\cache\CacheComponent;
 use app\components\logger\LoggerComponent;
 use app\dto\Review\GetReviewParams;
+use app\dto\Review\ReviewExcelRequest;
 use app\entities\Review;
 use app\entities\UserAuthEntity;
 use Doctrine\ORM\EntityManager;
@@ -119,6 +120,31 @@ class ReviewRepository
     public function getReviewById(int $reviewId)
     {
         return $this->reviewRepository->findOneBy(['id' => $reviewId]);
+    }
+
+    public function getReviewsForExcel(ReviewExcelRequest $reviewExcelRequest): array
+    {
+        $query = $this->reviewRepository->createQueryBuilder('r');
+
+        $query->where('r.user_id = :userId')
+            ->setParameter('userId', UserAuthEntity::getInstance()->getUser()->getId());
+
+        if (!empty($reviewExcelRequest->type) && $reviewExcelRequest->type !== Review::ALL) {
+            $query->andWhere('r.type = :typeParam')
+                ->setParameter('typeParam', $reviewExcelRequest->type);
+        }
+
+
+        if (!empty($reviewExcelRequest->date)) {
+            $dates = explode('-', $reviewExcelRequest->date);
+            if (!empty($dates) && is_array($dates) && count($dates) === self::NEEDED_COUNT_OF_DATES) {
+                $query->andWhere('r.created_at BETWEEN :startDate AND :endDate')
+                    ->setParameter('startDate', strtotime(trim($dates[0])))
+                    ->setParameter('endDate', strtotime(trim($dates[1] . self::SECOND_TIME)));
+            }
+        }
+
+        return $query->getQuery()->getArrayResult();
     }
 
 }

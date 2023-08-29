@@ -33,6 +33,7 @@ $app->group('/api',['middleware' => 'auth', function () use($app) {
     $app->post('/update-review', ReviewController::class.'@updateReview');
     $app->get('/get-reviews', ReviewController::class.'@getReviews');
     $app->delete('/delete-review', ReviewController::class.'@deleteReview');
+    $app->get('/get-excel-reviews', ReviewController::class.'@getReviewsListAsExcel');
 }]);
 
 

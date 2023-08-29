@@ -6,11 +6,14 @@ namespace app\controllers;
 
 use app\dto\Review\GetReviewParams;
 use app\dto\Review\ReviewDto;
+use app\dto\Review\ReviewExcelRequest;
 use app\repositories\ReviewRepositories\ReviewRepository;
 use app\Requests\ErrorRequest;
 use app\Requests\ResponseCodes;
 use app\Requests\SuccessResponse;
+use app\services\ReviewService\ReviewExcelService;
 use app\services\ReviewService\ReviewService;
+use Leaf\Http\Headers;
 use Psr\Container\ContainerInterface;
 
 class ReviewController extends Controller
@@ -19,6 +22,8 @@ class ReviewController extends Controller
     private ReviewService $reviewService;
     private ReviewRepository $reviewRepository;
 
+    private ReviewExcelService $reviewExcelService;
+
     public function __construct()
     {
         parent::__construct();
@@ -26,6 +31,7 @@ class ReviewController extends Controller
         $container = app()->config('container');
         $this->reviewService = $container->get(ReviewService::class);
         $this->reviewRepository = $container->get(ReviewRepository::class);
+        $this->reviewExcelService = $container->get(ReviewExcelService::class);
     }
 
     public function createReviewManually()
@@ -70,9 +76,22 @@ class ReviewController extends Controller
         }
         $result = $this->reviewService->deleteReview($reviewId);
         if (!$result) {
-            $this->response->json(ErrorRequest::setErrorException('error deleting review'));
+            $this->response->json(ErrorRequest::setErrorException('Error deleting review'));
         }
 
         $this->response->json(SuccessResponse::setData(ResponseCodes::OK, $result));
+    }
+
+    public function getReviewsListAsExcel()
+    {
+        $reviewExcelRequest = new ReviewExcelRequest($this->request->body());
+
+        $result = $this->reviewExcelService->run($reviewExcelRequest);
+        if ($result) {
+            echo base64_encode($result);
+        } else {
+            $this->response->json(ErrorRequest::setErrorWithCode(ResponseCodes::ERROR_TO_PARSE_EXCEL));
+        }
+
     }
 }
